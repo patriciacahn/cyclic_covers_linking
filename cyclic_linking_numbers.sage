@@ -134,13 +134,13 @@ class Cyclic_Cover:
             elif knot_overstrands[i][0]==component_number:
                 
                 for j in range(1,p+1):
-                    #x_i^j-x_{i+1}^j=e(i) x_i^(j-1)-x_{i+1}^(j-1)=-e(i) if s_j=q
+                    #x_i^j-x_{i+1}^j=e(i) if s_j=q
                     #x_i^j-x_{i+1}^j=0 else
                     #w(o(i)) 
                     w_over=self.three_cell_list(component_number)[knot_overstrands[i][1]]
                     #w(i)
                     w_under=self.three_cell_list(self.branch_component)[i]
-                    s_j=w_over.inverse()(w_under(j))#which lift of the pb curve is at page (j,j+1) of the roladex
+                    s_j=w_over.inverse()(w_under(j))#which lift of the pb curve is at page (j-1,j) of the roladex
                     
                     
                     #coefficient of x_i^j is 1
