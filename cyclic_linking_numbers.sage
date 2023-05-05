@@ -53,6 +53,77 @@ class Cyclic_Cover:
                 three_cell_list.append(three_cell_list[i])
         return three_cell_list
     
+    def sigma(self,component_number,i,j):
+        #superscript of 2-cell that hiker collides with on page (j-1,j) of roladex
+        
+        knot_overstrands=self.diagram.component_list[self.branch_component].overstrands
+        knot_signs=self.diagram.component_list[self.branch_component].signs
+        
+        
+        if knot_overstrands[i][0]==self.branch_component:
+            #w(o(i))
+            w_over=self.three_cell_list(self.branch_component)[knot_overstrands[i][1]]                        
+            #w(i)
+            w_under=self.three_cell_list(self.branch_component)[i]
+
+            #superscript of cell above; depends on crossing sign
+            if knot_signs[i]==1:
+                s=w_over.inverse()(w_under(j))
+            elif knot_signs[i]==-1:
+                s=w_over.inverse()(w_under(j))-1
+                if s==0:
+                    s=self.degree
+        elif knot_overstrands[i][0]==component_number:
+            #w(o(i)) 
+            w_over=self.three_cell_list(component_number)[knot_overstrands[i][1]]
+            #w(i)
+            w_under=self.three_cell_list(self.branch_component)[i]
+                    
+            #superscript of cell above; when this is a pb curve, does not depend on crossing sign
+            s=w_over.inverse()(w_under(j))
+            
+        return s
+    
+    def sigma_gamma(self,component_number_gamma,component_number_eta,i,j):
+        #superscript of 2-cell that hiker collides with on arc gamma_i^j of the jth lift of arc i of the pb curve gamma
+        
+        gamma_overstrands=self.diagram.component_list[component_number_gamma].overstrands
+        gamma_signs=self.diagram.component_list[component_number_gamma].signs
+        
+        #if over strand is the knot
+        
+        if gamma_overstrands[i][0]==self.branch_component:
+            #w(o(i))
+            w_over=self.three_cell_list(self.branch_component)[gamma_overstrands[i][1]]                        
+            #w(i)
+            w_under=self.three_cell_list(component_number_gamma)[i]
+            
+            #superscript of cell above; depends on crossing sign
+            if gamma_signs[i]==1:
+                s=w_over.inverse()(w_under(j))
+            elif gamma_signs[i]==-1:
+                s=w_over.inverse()(w_under(j))-1
+                if s==0:
+                    s=self.degree
+                    
+        #if over strand is the pb cuve component_number_eta
+        if gamma_overstrands[i][0]==component_number_eta:
+            #w(o(i))
+            w_over=self.three_cell_list(component_number_eta)[gamma_overstrands[i][1]]  
+            #w(i)
+            w_under=self.three_cell_list(component_number_gamma)[i]
+            
+            #if over strand is pb curve, s doesn't depend on sign
+            s=w_over.inverse()(w_under(j))
+        return s
+            
+        
+        
+    
+    
+        
+        
+    
     def two_chain(self,component_number,lift_number):
         #component_number is which pseudo-branch curve P we are using
         #lift_number is the lift P^q of P that we are bounding
@@ -102,20 +173,21 @@ class Cyclic_Cover:
                 
                 for j in range(1,p+1):
                     #x_i^j-x_{i+1}^j-e(i)(x_{o(i)}^s-x_{o(i)}^{t})=0, t=s+1 %p  between {1,...,p}
-                    #w(o(i))
-                    w_over=self.three_cell_list(self.branch_component)[knot_overstrands[i][1]]                        
-                    #w(i)
-                    w_under=self.three_cell_list(self.branch_component)[i]
+#                     #w(o(i))
+#                     w_over=self.three_cell_list(self.branch_component)[knot_overstrands[i][1]]                        
+#                     #w(i)
+#                     w_under=self.three_cell_list(self.branch_component)[i]
                     
-                    #superscript of cell above; depends on crossing sign
-                    if knot_signs[i]==1:
-                        s=w_over.inverse()(w_under(j))
-                    elif knot_signs[i]==-1:
-                        if w_under(j)!=1:
-                            s=w_over.inverse()(w_under(j)-1)
-                        else:
-                            s=w_over.inverse()(p)
+#                     #superscript of cell above; depends on crossing sign
+#                     if knot_signs[i]==1:
+#                         s=w_over.inverse()(w_under(j))
+#                     elif knot_signs[i]==-1:
+#                         if w_under(j)!=1:
+#                             s=w_over.inverse()(w_under(j)-1)
+#                         else:
+#                             s=w_over.inverse()(p)
                     
+                    s=self.sigma(component_number,i,j)
                     t=s+1
                     if t==p+1:
                         t=1
@@ -135,14 +207,27 @@ class Cyclic_Cover:
                 
                 for j in range(1,p+1):
                     #x_i^j-x_{i+1}^j=e(i) if s_j=q
+                    #x_i^j-x_{i+1}^j=-e(i) if s_{j+1}=q
                     #x_i^j-x_{i+1}^j=0 else
-                    #w(o(i)) 
-                    w_over=self.three_cell_list(component_number)[knot_overstrands[i][1]]
-                    #w(i)
-                    w_under=self.three_cell_list(self.branch_component)[i]
-                    s_j=w_over.inverse()(w_under(j))#which lift of the pb curve is at page (j-1,j) of the roladex
                     
+#                     #w(o(i)) 
+#                     w_over=self.three_cell_list(component_number)[knot_overstrands[i][1]]
+#                     #w(i)
+#                     w_under=self.three_cell_list(self.branch_component)[i]
                     
+#                     if knot_signs[i]==1:
+#                         s_j=w_over.inverse()(w_under(j))#which lift of the pb curve is at page (j-1,j) of the roladex
+#                         s_j1=w_over.inverse()(w_under(j+1))#which lift of the pb curve is at page (j,j+1) of the roladex
+#                     elif knot_signs[i]==-1:
+#                         s_j=w_over.inverse()(w_under(j))+1#which lift of the pb curve is at page (j-1,j) of the roladex
+#                         s_j1=w_over.inverse()(w_under(j+1))+1#which lift of the pb curve is at page (j,j+1) of the roladex
+                    
+                    s_j=self.sigma(component_number,i,j)
+                    if j!=p:
+                        s_j1=self.sigma(component_number,i,j+1)
+                    elif j==p:
+                        s_j1=self.sigma(component_number,i,1)
+            
                     #coefficient of x_i^j is 1
                     M[row_index(i,j),column_index(i,j)]+=1
                     #coefficient of x_{i+1}^j is -1
@@ -150,10 +235,12 @@ class Cyclic_Cover:
                     #constant term
                     if s_j==lift_number:
                         v[row_index(i,j)]+=knot_signs[i]
-                        if j!=1:
-                            v[row_index(i,j-1)]+=-knot_signs[i]
-                        else:
-                            v[row_index(i,p)]+=-knot_signs[i]
+                        #if j!=1:
+                        #    v[row_index(i,j-1)]+=-knot_signs[i]
+                        #else:
+                        #    v[row_index(i,p)]+=-knot_signs[i]
+                    elif s_j1==lift_number:
+                        v[row_index(i,j)]+=-knot_signs[i]
                         
                         
                     
@@ -178,13 +265,13 @@ class Cyclic_Cover:
             
             
         
-        #Uncomment to display equations
-        #for i in range(n*p+n):
-        #    print(M.row(i))
-        #    for j in range(n*p):
-        #        if M[i,j]!=0:
-        #            print("+",M[i,j],"*x_",j // p,"^",(j% p)+1)
-        #    print("=",v.column()[i])
+# #         Uncomment to display equations
+#         for i in range(n*p+n):
+#             print(M.row(i))
+#             for j in range(n*p):
+#                 if M[i,j]!=0:
+#                     print("+",M[i,j],"*x_",j // p,"^",(j% p)+1)
+#             print("=",v.column()[i])
         
         
         return M.solve_right(v)
@@ -208,34 +295,35 @@ class Cyclic_Cover:
             
             if crossing_type==component_number_1:
                 
-                    #w(o(i))
-                    w_over=self.three_cell_list(component_number_1)[over_arc_number]
-                    #w(i)
-                    w_under=self.three_cell_list(component_number_2)[i]
-                    s=w_over.inverse()(w_under(lift_number_2))
+#                     #w(o(i))
+#                     w_over=self.three_cell_list(component_number_1)[over_arc_number]
+#                     #w(i)
+#                     w_under=self.three_cell_list(component_number_2)[i]
+#                     s=w_over.inverse()(w_under(lift_number_2))
                     
+                    s=self.sigma_gamma(component_number_2,component_number_1,i,lift_number_2)
                     if s==lift_number_1:
                         linking_number+=pb_2_signs[i]
                         #print(pb_2_signs[i])
                 
             elif crossing_type==self.branch_component:
-                    #w(o(i))
-                    w_over=self.three_cell_list(self.branch_component)[over_arc_number]
-                    #print("w_over")
-                    #print(w_over)
-                    #w(i)
-                    w_under=self.three_cell_list(component_number_2)[i]
-                    #print("w_under")
-                    #print(w_under)
-                    #superscript of cell above; depends on crossing sign
-                    if pb_2_signs[i]==1:
-                        s=w_over.inverse()(w_under(lift_number_2))
-                    elif pb_2_signs[i]==-1:
-                        if w_under(lift_number_2)!=1:
-                            s=w_over.inverse()(w_under(lift_number_2)-1)
-                        else:
-                            s=w_over.inverse()(p)
-                    
+#                     #w(o(i))
+#                     w_over=self.three_cell_list(self.branch_component)[over_arc_number]
+#                     #print("w_over")
+#                     #print(w_over)
+#                     #w(i)
+#                     w_under=self.three_cell_list(component_number_2)[i]
+#                     #print("w_under")
+#                     #print(w_under)
+#                     #superscript of cell above; depends on crossing sign
+#                     if pb_2_signs[i]==1:
+#                         s=w_over.inverse()(w_under(lift_number_2))
+#                     elif pb_2_signs[i]==-1:
+#                         if w_under(lift_number_2)!=1:
+#                             s=w_over.inverse()(w_under(lift_number_2)-1)
+#                         else:
+#                             s=w_over.inverse()(p)
+                    s=self.sigma_gamma(component_number_2,component_number_1,i,lift_number_2)
                     #value of x_o(i)^s * sign
                     linking_number+=pb_2_signs[i]*pb_1_chain[self.degree*over_arc_number+s-1]
                     #print("s",s)
