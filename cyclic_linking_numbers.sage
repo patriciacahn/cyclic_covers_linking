@@ -173,19 +173,7 @@ class Cyclic_Cover:
                 
                 for j in range(1,p+1):
                     #x_i^j-x_{i+1}^j-e(i)(x_{o(i)}^s-x_{o(i)}^{t})=0, t=s+1 %p  between {1,...,p}
-#                     #w(o(i))
-#                     w_over=self.three_cell_list(self.branch_component)[knot_overstrands[i][1]]                        
-#                     #w(i)
-#                     w_under=self.three_cell_list(self.branch_component)[i]
-                    
-#                     #superscript of cell above; depends on crossing sign
-#                     if knot_signs[i]==1:
-#                         s=w_over.inverse()(w_under(j))
-#                     elif knot_signs[i]==-1:
-#                         if w_under(j)!=1:
-#                             s=w_over.inverse()(w_under(j)-1)
-#                         else:
-#                             s=w_over.inverse()(p)
+
                     
                     s=self.sigma(component_number,i,j)
                     t=s+1
@@ -210,18 +198,7 @@ class Cyclic_Cover:
                     #x_i^j-x_{i+1}^j=-e(i) if s_{j+1}=q
                     #x_i^j-x_{i+1}^j=0 else
                     
-#                     #w(o(i)) 
-#                     w_over=self.three_cell_list(component_number)[knot_overstrands[i][1]]
-#                     #w(i)
-#                     w_under=self.three_cell_list(self.branch_component)[i]
-                    
-#                     if knot_signs[i]==1:
-#                         s_j=w_over.inverse()(w_under(j))#which lift of the pb curve is at page (j-1,j) of the roladex
-#                         s_j1=w_over.inverse()(w_under(j+1))#which lift of the pb curve is at page (j,j+1) of the roladex
-#                     elif knot_signs[i]==-1:
-#                         s_j=w_over.inverse()(w_under(j))+1#which lift of the pb curve is at page (j-1,j) of the roladex
-#                         s_j1=w_over.inverse()(w_under(j+1))+1#which lift of the pb curve is at page (j,j+1) of the roladex
-                    
+                   
                     s_j=self.sigma(component_number,i,j)
                     if j!=p:
                         s_j1=self.sigma(component_number,i,j+1)
@@ -295,44 +272,22 @@ class Cyclic_Cover:
             
             if crossing_type==component_number_1:
                 
-#                     #w(o(i))
-#                     w_over=self.three_cell_list(component_number_1)[over_arc_number]
-#                     #w(i)
-#                     w_under=self.three_cell_list(component_number_2)[i]
-#                     s=w_over.inverse()(w_under(lift_number_2))
+
                     
                     s=self.sigma_gamma(component_number_2,component_number_1,i,lift_number_2)
                     if s==lift_number_1:
                         linking_number+=pb_2_signs[i]
-                        #print(pb_2_signs[i])
+                        
                 
             elif crossing_type==self.branch_component:
-#                     #w(o(i))
-#                     w_over=self.three_cell_list(self.branch_component)[over_arc_number]
-#                     #print("w_over")
-#                     #print(w_over)
-#                     #w(i)
-#                     w_under=self.three_cell_list(component_number_2)[i]
-#                     #print("w_under")
-#                     #print(w_under)
-#                     #superscript of cell above; depends on crossing sign
-#                     if pb_2_signs[i]==1:
-#                         s=w_over.inverse()(w_under(lift_number_2))
-#                     elif pb_2_signs[i]==-1:
-#                         if w_under(lift_number_2)!=1:
-#                             s=w_over.inverse()(w_under(lift_number_2)-1)
-#                         else:
-#                             s=w_over.inverse()(p)
+
                     s=self.sigma_gamma(component_number_2,component_number_1,i,lift_number_2)
                     #value of x_o(i)^s * sign
                     linking_number+=pb_2_signs[i]*pb_1_chain[self.degree*over_arc_number+s-1]
-                    #print("s",s)
-                    #print("over arc",over_arc_number)
-                    #print("index",self.degree*over_arc_number+s-1)
-                    #print(pb_2_signs[i]*pb_1_chain[self.degree*over_arc_number+s-1])
+                    
                     
                 
-            #elif crossing_type==component_number_2:
+            
         return linking_number
             
 
